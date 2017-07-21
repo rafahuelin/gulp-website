@@ -4,7 +4,9 @@ var livereload = require('gulp-livereload');
 var concat = require('gulp-concat');
 
 // File paths
+var DIST_PATH = 'public/dist';
 var SCRIPTS_PATH = 'public/scripts/**/*.js';
+var CSS_PATH = 'public/css/**/*.css';
 
 // HTML
 
@@ -16,6 +18,10 @@ gulp.task('html', function() {
 // Styles
 gulp.task('styles', function () {
   console.log('starting styles task');
+  return gulp.src(['public/css/reset.css', CSS_PATH])
+    .pipe(concat('styles.css'))
+    .pipe(gulp.dest(DIST_PATH))
+    .pipe(livereload());
 });
 
 // Scripts
@@ -24,7 +30,7 @@ gulp.task('scripts', function () {
 
   return gulp.src(SCRIPTS_PATH)
     .pipe(uglify())
-    .pipe(gulp.dest('public/dist'))
+    .pipe(gulp.dest(DIST_PATH))
     .pipe(livereload());
 });
 
