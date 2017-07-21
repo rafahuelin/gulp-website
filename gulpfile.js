@@ -6,6 +6,7 @@ var minifyCss = require('gulp-minify-css');
 var autoprefixer = require('gulp-autoprefixer');
 var plumber = require('gulp-plumber');
 var sourcemaps = require('gulp-sourcemaps');
+var sass = require('gulp-sass');
 
 // File paths
 var DIST_PATH = 'public/dist';
@@ -20,9 +21,27 @@ gulp.task('html', function() {
 });
 
 // Styles
+// gulp.task('styles', function () {
+//   console.log('starting styles task');
+//   return gulp.src(['public/css/reset.css', CSS_PATH])
+//     .pipe(plumber(function (err) {
+//       console.log('Styles Task Error');
+//       console.log(err);
+//       this.emit('end');
+//     }))
+//     .pipe(sourcemaps.init())
+//     .pipe(autoprefixer())
+//     .pipe(concat('styles.css'))
+//     .pipe(minifyCss())
+//     .pipe(sourcemaps.write())
+//     .pipe(gulp.dest(DIST_PATH))
+//     .pipe(livereload());
+// });
+
+// Styles For SCSS
 gulp.task('styles', function () {
   console.log('starting styles task');
-  return gulp.src(['public/css/reset.css', CSS_PATH])
+  return gulp.src('public/scss/styles.scss')
     .pipe(plumber(function (err) {
       console.log('Styles Task Error');
       console.log(err);
@@ -30,8 +49,9 @@ gulp.task('styles', function () {
     }))
     .pipe(sourcemaps.init())
     .pipe(autoprefixer())
-    .pipe(concat('styles.css'))
-    .pipe(minifyCss())
+    .pipe(sass({
+      outputStyle: 'compressed'
+    }))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest(DIST_PATH))
     .pipe(livereload());
@@ -61,5 +81,6 @@ gulp.task('watch', function () {
   require('./server.js');
   livereload.listen();
   gulp.watch(SCRIPTS_PATH, ['scripts', 'html']);
-  gulp.watch(CSS_PATH, ['styles']);
+  // gulp.watch(CSS_PATH, ['styles']);
+  gulp.watch('public/scss/**/*.scss', ['styles']);
 });
