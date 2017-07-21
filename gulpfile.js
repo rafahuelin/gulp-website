@@ -8,3 +8,7 @@ gulp.task('styles', function () {
 // Script
 
 // Images
+
+gulp.task('default', function () {
+  console.log('Starting default task');
+});
