@@ -15,11 +15,17 @@ var handlebarsLib = require('handlebars');
 var declare = require('gulp-declare');
 var wrap = require('gulp-wrap');
 
+// Image compression
+var imagemin = require('gulp-imagemin');
+var imageminPngquant = require('imagemin-pngquant');
+var imageminJpegRecompress = require('imagemin-jpeg-recompress');
+
 // File paths
 var DIST_PATH = 'public/dist';
 var SCRIPTS_PATH = 'public/scripts/**/*.js';
 var CSS_PATH = 'public/css/**/*.css';
 var TEMPLATES_PATH = 'templates/**/*.hbs';
+var IMAGES_PATH = 'public/images/**/*.{png,jpeg,jpg,svg,gif}';
 
 // HTML
 gulp.task('html', function() {
@@ -87,7 +93,18 @@ gulp.task('scripts', function () {
 
 // Images
 gulp.task('images', function () {
-  console.log('starting images task');
+  return gulp.src(IMAGES_PATH)
+    .pipe(imagemin(
+      [
+        imagemin.gifsicle(),
+        imagemin.jpegtran(),
+        imagemin.optipng(),
+        imagemin.svgo(),
+        imageminPngquant(),
+        imageminJpegRecompress()
+      ]
+    ))
+    .pipe(gulp.dest(DIST_PATH + '/images'));
 });
 
 gulp.task('templates', function () {
